@@ -87,6 +87,88 @@ def extract_markdown_links(text):
     # [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
 
 def split_nodes_image(old_nodes):
+    new_nodes = []
 
-    new_node = []
-    matches = re.findall(r+![+,text)
+    for node in old_nodes:
+
+        # Only process normal text nodes
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+
+        original_text = node.text
+        images = extract_markdown_images(original_text)
+
+        # If no images, keep original node
+        if len(images) == 0:
+            new_nodes.append(node)
+            continue
+
+        remaining_text = original_text
+
+        for image_alt, image_link in images:
+
+            image_markdown = f"![{image_alt}]({image_link})"
+
+            sections = remaining_text.split(image_markdown, 1)
+
+            # Text before image
+            if sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+
+            # Image node
+            new_nodes.append(
+                TextNode(image_alt, TextType.IMAGE, image_link)
+            )
+
+            # Continue processing the remaining text
+            remaining_text = sections[1]
+
+        # Remaining text after last image
+        if remaining_text != "":
+            new_nodes.append(TextNode(remaining_text, TextType.TEXT))
+
+    return new_nodes
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+
+    for node in old_nodes:
+
+        # Only process normal text nodes
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+
+        original_text = node.text
+        images = extract_markdown_images(original_text)
+
+        # If no images, keep original node
+        if len(link) == 0:
+            new_nodes.append(node)
+            continue
+
+        remaining_text = original_text
+
+        for link_alt, link_url in link:
+
+            image_markdown = f"![{link_alt}]({link_url})"
+
+            sections = remaining_text.split(image_markdown, 1)
+
+            # Text before image
+            if sections[0] != "":
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+
+            # Image node
+            new_nodes.append(
+                TextNode(image_alt, TextType.LINK, link_url))
+
+            # Continue processing the remaining text
+            remaining_text = sections[1]
+
+        # Remaining text after last image
+        if remaining_text != "":
+            new_nodes.append(TextNode(remaining_text, TextType.TEXT))
+
+    return new_nodes
