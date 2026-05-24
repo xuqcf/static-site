@@ -205,7 +205,7 @@ class BlockType(Enum):
     HEADING = "heading"
     CODE = "code"
     QUOTE = "quote"
-    UNORDERED_LIST = "underordered"
+    UNORDERED_LIST = "unordered"
     ORDERED_LIST = "ordered"
 
 
@@ -216,18 +216,17 @@ def block_to_block_type(block):
     if block.startswith("```") and block.endswith("```"):
         return BlockType.CODE
 
-    line = block.split("\n")
+    lines = block.split("\n")
 
-    for line in lines:
-        if all(line.startswith(">")):
+    if all(line.startswith(">") for line in lines):
             return BlockType.QUOTE
     
-    if  all(line.startswith("+") or line.startswith("-") for line in lines):
+    if all(line.startswith("- ") for line in lines):
             return BlockType.UNORDERED_LIST
 
     is_ordered = True
 
-    for i, line in enumerate(line):
+    for i, line in enumerate(lines):
         if not line.startswith(f"{i + 1}. "):
             is_ordered = False
             break
