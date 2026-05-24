@@ -198,3 +198,32 @@ def markdown_to_blocks(markdown):
             cleaned.append(stripped)
 
     return cleaned
+
+
+class BlockType(Enum):
+    PARAGRAPH = "paragraph"
+    HEADING = "heading"
+    CODE = "code"
+    QUOTE = "quote"
+    UNORDERED_LIST = "underordered"
+    ORDERED_LIST = "ordered"
+
+
+def block_to_block_type(block):
+    if re.match(r"^#{1,6} +.+$", block):
+        return BlockType.HEADING
+    
+    if block.startswith("```") and block.endswith("```"):
+        return BlockType.CODE
+
+    line = block.split("\n")
+
+    for line in lines:
+        if all(line.startswith(">")):
+            return BlockType.QUOTE
+    
+    if  all(line.startswith("+") or line.startswith("-") for line in lines):
+            return BlockType.UNORDERED_LIST
+
+
+    
