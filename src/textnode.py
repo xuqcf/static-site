@@ -1,5 +1,5 @@
 from enum import Enum
-from htmlnode import LeafNode
+from htmlnode import LeafNode, ParentNode
 import re
 
 
@@ -236,3 +236,62 @@ def block_to_block_type(block):
 
     return BlockType.PARAGRAPH
     
+def text_to_children(text):
+    text_nodes = text_to_textnodes(text)
+
+    children = []
+
+    for text_node in text_nodes:
+        html_node = text_node_to_html_node(text_node)
+        children.append(html_node)
+    return children
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+
+    for block in blocks:
+        block_type = block_to_block_type(block)
+
+        if BlockType.PARAGRAPH:
+            raw_text = block.strip()
+            children = text_to_children(raw_text)
+
+            paragraph_node = ParentNode("p", children)
+            block_nodes.append(paragraph_node)
+
+        elif BlockType.HEADING:
+            
+            parts = block.split("", 1)
+
+            hashes = parts[0]
+
+            heading_text[1]
+            
+            level = len(hashes)
+            if level > 6:
+                raise ValueError(f"Invalid Heading level: {level}")
+
+
+            tag = f"h{level}"
+
+            children = text_to_children(heading_text)
+            heading_node = LeafNode(tag, children)
+            block_nodes.append(heading_node)
+
+        elif BlockType.UNORDERED_LIST:
+
+            lines = block.split("\n")
+            list_items = []
+
+            for line in lines:
+
+                item_text = line[2:]
+
+                children = text_to_children(item_text)
+
+                list_items.append(ParentNode("li", children))
+
+            ul_node = ParentNode("ul", list_items)
+            block_nodes.append(ul_node)
+        
+        elif
