@@ -248,24 +248,23 @@ def text_to_children(text):
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
-
+    block_nodes = []
     for block in blocks:
         block_type = block_to_block_type(block)
-
-        if BlockType.PARAGRAPH:
-            raw_text = block.strip()
+        if block_type == BlockType.PARAGRAPH:
+            raw_text = block.replace("\n", " ")
             children = text_to_children(raw_text)
 
             paragraph_node = ParentNode("p", children)
             block_nodes.append(paragraph_node)
 
-        elif BlockType.HEADING:
+        elif block_type == BlockType.HEADING:
             
-            parts = block.split("", 1)
+            parts = block.split(" ", 1)
 
             hashes = parts[0]
 
-            heading_text[1]
+            heading_text = parts[1]
             
             level = len(hashes)
             if level > 6:
@@ -275,10 +274,10 @@ def markdown_to_html_node(markdown):
             tag = f"h{level}"
 
             children = text_to_children(heading_text)
-            heading_node = LeafNode(tag, children)
+            heading_node = ParentNode(tag, children)
             block_nodes.append(heading_node)
 
-        elif BlockType.UNORDERED_LIST:
+        elif block_type == BlockType.UNORDERED_LIST:
 
             lines = block.split("\n")
             list_items = []
@@ -294,4 +293,41 @@ def markdown_to_html_node(markdown):
             ul_node = ParentNode("ul", list_items)
             block_nodes.append(ul_node)
         
-        elif
+        elif block_type == BlockType.ORDERED_LIST:
+            lines = block.split("\n")
+            list_items= []
+
+            for line in lines:
+
+                item_text = line.split(". ", 1)[1]
+
+                children = text_to_children(item_text)
+
+                list_items.append(ParentNode("li", children))
+
+            ol_node = ParentNode("ol", list_items)
+            block_nodes.append(ol_node)
+
+        elif block_type == BlockType.QUOTE:
+            lines = block.split("\n")
+            cleaned_lines = []
+
+            for line in lines:
+               cleaned_lines.append(line[1:].strip())
+            text = "\n".join(cleaned_lines)
+            children = text_to_children(text)
+            quote_node = ParentNode("blockquote", children)
+
+            block_nodes.append(quote_node)
+
+        elif block_type == BlockType.CODE:
+
+            code_text = block[4:-3]
+
+            code_leaf = LeafNode("code", code_text)
+
+            pre_node = ParentNode("pre", [code_leaf])
+
+            block_nodes.append(pre_node)
+
+    return ParentNode("div", block_nodes)
