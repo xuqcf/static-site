@@ -225,5 +225,15 @@ def block_to_block_type(block):
     if  all(line.startswith("+") or line.startswith("-") for line in lines):
             return BlockType.UNORDERED_LIST
 
+    is_ordered = True
 
+    for i, line in enumerate(line):
+        if not line.startswith(f"{i + 1}. "):
+            is_ordered = False
+            break
+
+    if is_ordered:
+        return BlockType.ORDERED_LIST
+
+    return BlockType.PARAGRAPH
     
