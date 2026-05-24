@@ -72,7 +72,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             if i % 2 == 0:
                 new_nodes.append(TextNode(parts[i], TextType.TEXT))
             else:
-                new_nodes.append(Te1xtNode(parts[i], text_type))
+                new_nodes.append(TextNode(parts[i], text_type))
 
     return new_node
 
