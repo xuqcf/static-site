@@ -74,7 +74,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             else:
                 new_nodes.append(TextNode(parts[i], text_type))
 
-    return new_node
+    return new_nodes
 
 def extract_markdown_images(text):
     text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
@@ -160,7 +160,7 @@ def split_nodes_link(old_nodes):
             if sections[0] != "":
                 new_nodes.append(TextNode(sections[0], TextType.TEXT))
 
-            # Image node
+            # LINK node
             new_nodes.append(
                 TextNode(image_alt, TextType.LINK, link_url))
 
