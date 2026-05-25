@@ -12,10 +12,10 @@ def main():
         basepath = "/"
 
     static = "static"
-    doc = "doc"
+    docs = "docs"
 
-    prepare_public(doc)
-    copy_dir(static, doc)
+    prepare_public(docs)
+    copy_dir(static, docs)
 
     generate_pages_recursive("content", "template.html", "doc", basepath)
 
