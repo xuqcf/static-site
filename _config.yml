@@ -2,4 +2,4 @@
   uses: actions/jekyll-build-pages@v1
   with:
     source: ./
-    destination: ./_site  # Change from 'docs' to '_site'
+    destination: ./doc  # Change from 'docs' to '_site'
