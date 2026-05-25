@@ -10,10 +10,10 @@ def main():
     copy_dir(static, public)
 
 def prepare_public(public_path):
-    if os.path.exists(public):
-        shutil.rmtree(public)
+    if os.path.exists(public_path):
+        shutil.rmtree(public_path)
 
-    os.mkdir(public)
+    os.mkdir(public_path)
 
 def copy_dir(source_dir, dest_dir):
  
@@ -23,7 +23,7 @@ def copy_dir(source_dir, dest_dir):
         dest_path = os.path.join(dest_dir, item) #this looks inside the public folder and makes a destination 
 
         if os.path.isfile(source_path):
-            shutil.copy(source_path, destination)
+            shutil.copy(source_path, dest_path)
             print(f"Copied file: {source_path} -> {dest_path}")
         
         else:
