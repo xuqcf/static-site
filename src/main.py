@@ -10,7 +10,7 @@ def main():
     prepare_public(public)
     copy_dir(static, public)
 
-generate_page("content/index.md", "template.html", "public/index.html")
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 def prepare_public(public_path):
     if os.path.exists(public_path):
@@ -48,14 +48,14 @@ def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     
     with open(from_path, "r") as f:
-        from_content = f.read
+        from_content = f.read()
     
-    with open(template_content, "r") as f:
-        template_content = f.read
+    with open(template_path, "r") as f:
+        template_content = f.read()
     
     html_node = markdown_to_html_node(from_content)
     
-    string = html_node.to_html
+    string = html_node.to_html()
     
     title = extract_title(from_content)
 
@@ -65,7 +65,7 @@ def generate_page(from_path, template_path, dest_path):
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
     with open(dest_path, "w") as f:
-        f.write(template)
-        
+        f.write(template_content)
+
 if __name__ == "__main__":
     main()
