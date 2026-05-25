@@ -17,7 +17,7 @@ def main():
     prepare_public(docs)
     copy_dir(static, docs)
 
-    generate_pages_recursive("content", "template.html", "doc", basepath)
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 def prepare_public(public_path):
     if os.path.exists(public_path):
