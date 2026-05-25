@@ -1,6 +1,7 @@
 from textnode import TextNode, TextType
 import os 
 import shutil 
+import re
 
 def main():
     static = "static"
@@ -30,5 +31,14 @@ def copy_dir(source_dir, dest_dir):
             os.mkdir(dest_path)
             copy_dir(source_path, dest_path)
 
+def extract_title(markdown):
+    for line in markdown.splitlines():
+
+        cleaned_line = line.strip()
+
+        if cleaned_line.startswith("#") and not cleaned_line.startswith("##"):
+            return cleaned_line[1:].strip()
+        
+    raise ValueError("No H1 heading found in the provided markdown.")
 if __name__ == "__main__":
     main()
